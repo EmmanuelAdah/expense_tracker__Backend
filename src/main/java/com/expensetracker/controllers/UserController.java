@@ -7,13 +7,12 @@ import com.expensetracker.dtos.response.UserResponse;
 import com.expensetracker.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Stream;
 
 @RestController
+@RequestMapping("/api/tracker")
 public class UserController {
     private final UserServiceImpl userServiceImpl;
 
@@ -28,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/findById")
-    public ResponseEntity<Stream<UserResponse>> findById(Long userId){
+    public ResponseEntity<Stream<UserResponse>> findById(String userId){
         return ResponseEntity.ok(userServiceImpl.findById(userId));
     }
 
@@ -42,8 +41,13 @@ public class UserController {
         return ResponseEntity.ok(userServiceImpl.findAll());
     }
 
-    @PostMapping
+    @PostMapping("/userLogin")
     public UserResponse userLogin(LoginRequest loginRequest){
         return userServiceImpl.userLogin(loginRequest);
+    }
+
+    @DeleteMapping("/deleteById")
+    public void deleteById(String id){
+        userServiceImpl.deleteById(id);
     }
 }
