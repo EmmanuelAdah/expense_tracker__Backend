@@ -1,10 +1,10 @@
 package com.expensetracker.dtos.requests;
 
 import lombok.Data;
-import org.springframework.stereotype.Component;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Component
+@Document
 public class AddUserRequest {
     private String firstname;
     private String lastname;
