@@ -1,17 +1,16 @@
 package com.expensetracker.data.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Entity
+@Document
 public class Expense {
     @Id
-    @GeneratedValue
     private long id;
 
+    private long userId;
     private String name;
     private double amount;
     private String category;
