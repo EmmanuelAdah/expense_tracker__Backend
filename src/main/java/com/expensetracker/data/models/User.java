@@ -1,22 +1,24 @@
 package com.expensetracker.data.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import lombok.Data;
-import org.springframework.stereotype.Component;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
-@Component
-@Entity
+@Document(collection = "users")
 public class User {
     @Id
-    @GeneratedValue
-    private long id;
+    private String id;
 
     private String firstname;
     private String lastname;
     private String email;
     private String username;
     private String password;
+
+    @DBRef
+    private List<Expense> expenses = new ArrayList<>();
 }
