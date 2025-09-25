@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 public interface UserService {
 
     AddUserResponse registerUser(AddUserRequest request);
-    Stream<UserResponse> findById(Long userId);
+    Stream<UserResponse> findById(String userId);
     UserResponse findByUsername(String username);
     Stream<UserResponse> findAll();
     UserResponse userLogin(LoginRequest loginRequest);
