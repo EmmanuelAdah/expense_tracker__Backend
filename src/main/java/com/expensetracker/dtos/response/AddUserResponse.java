@@ -1,12 +1,12 @@
 package com.expensetracker.dtos.response;
 
 import lombok.Data;
-import org.springframework.stereotype.Component;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
-@Component
+@Document
 public class AddUserResponse {
-    private long userId;
+    private String userId;
     private String email;
     private String username;
 
