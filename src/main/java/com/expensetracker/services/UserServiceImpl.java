@@ -12,7 +12,6 @@ import com.expensetracker.utils.Mapper;
 import com.expensetracker.utils.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -35,7 +34,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Stream<UserResponse> findById(Long userId){
+    public Stream<UserResponse> findById(String userId){
         Optional<User> user = usersRepository.findById(userId);
         user.orElseThrow(()-> new RuntimeException("User not found"));
         return user.stream()
@@ -58,6 +57,7 @@ public class UserServiceImpl implements UserService{
                 .map(Mapper::map);
     }
 
+    @Override
     public UserResponse userLogin(LoginRequest loginRequest) {
         User user = usersRepository.findByUsername(loginRequest.getUsername());
         if(user == null) throw new InvalidLoginCredentialsException("Invalid username or password");
@@ -65,5 +65,9 @@ public class UserServiceImpl implements UserService{
         if(!PasswordEncoder.checkPassword(loginRequest.getPassword(), user.getPassword()))
             throw new InvalidLoginCredentialsException("Invalid username or password");
         return map(user);
+    }
+
+    public void deleteById(String id) {
+        usersRepository.deleteById(id);
     }
 }
