@@ -8,18 +8,13 @@ import com.expensetracker.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Stream;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/tracker")
 public class UserController {
-    private final UserServiceImpl userServiceImpl;
-
     @Autowired
-    public UserController(UserServiceImpl userServiceImpl){
-        this.userServiceImpl = userServiceImpl;
-    }
+    private UserServiceImpl userServiceImpl;
 
     @PostMapping("/registerUser")
     public ResponseEntity<AddUserResponse> registerUser(AddUserRequest request){
@@ -27,7 +22,7 @@ public class UserController {
     }
 
     @GetMapping("/findById")
-    public ResponseEntity<Stream<UserResponse>> findById(String userId){
+    public ResponseEntity<List<UserResponse>> findById(String userId){
         return ResponseEntity.ok(userServiceImpl.findById(userId));
     }
 
@@ -37,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/findAll")
-    public ResponseEntity<Stream<UserResponse>> findAll(){
+    public ResponseEntity<List<UserResponse>> findAll(){
         return ResponseEntity.ok(userServiceImpl.findAll());
     }
 
@@ -49,5 +44,15 @@ public class UserController {
     @DeleteMapping("/deleteById")
     public void deleteById(String id){
         userServiceImpl.deleteById(id);
+    }
+
+    @DeleteMapping("/deleteByUsername")
+    public void deleteByUsername(String username){
+        userServiceImpl.deleteByUsername(username);
+    }
+
+    @DeleteMapping("/deleteAllUsers")
+    public void deleteAll(){
+        userServiceImpl.deleteAll();
     }
 }
