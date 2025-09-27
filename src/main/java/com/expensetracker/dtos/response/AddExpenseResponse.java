@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 public class AddExpenseResponse {
-    private String id;
+    private long id;
     private String name;
     private double amount;
     private String category;
