@@ -5,14 +5,19 @@ import com.expensetracker.dtos.requests.LoginRequest;
 import com.expensetracker.dtos.response.AddUserResponse;
 import com.expensetracker.dtos.response.UserResponse;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.stream.Stream;
 
 @Service
 public interface UserService {
 
     AddUserResponse registerUser(AddUserRequest request);
-    Stream<UserResponse> findById(String userId);
+    List<UserResponse> findById(String userId);
     UserResponse findByUsername(String username);
-    Stream<UserResponse> findAll();
+    List<UserResponse> findAll();
     UserResponse userLogin(LoginRequest loginRequest);
+    void deleteById(String id);
+    void deleteByUsername(String username);
+    void deleteAll();
 }
