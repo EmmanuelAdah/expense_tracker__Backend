@@ -7,17 +7,27 @@ import java.util.List;
 
 @Data
 @Entity
+@Table
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private long id;
 
+    @Column(nullable = false, columnDefinition = "Text")
     private String firstname;
+
+    @Column(nullable = false, columnDefinition = "Text")
     private String lastname;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false, unique = true)
     private String username;
+
+    @Column(nullable = false, unique = true)
     private String password;
 
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expense> expenses = new ArrayList<>();
 }
