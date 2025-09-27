@@ -20,12 +20,8 @@ import static com.expensetracker.utils.Mapper.*;
 
 @Service
 public class UserServiceImpl implements UserService{
-    private final UsersRepository usersRepository;
-
     @Autowired
-    public UserServiceImpl(UsersRepository usersRepository){
-        this.usersRepository = usersRepository;
-    }
+    private UsersRepository usersRepository;
 
     @Override
     public AddUserResponse registerUser(AddUserRequest request){
@@ -34,27 +30,30 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Stream<UserResponse> findById(String userId){
+    public List<UserResponse> findById(String userId){
         Optional<User> user = usersRepository.findById(userId);
         user.orElseThrow(()-> new RuntimeException("User not found"));
         return user.stream()
-                .map(Mapper::map);
+                .map(Mapper::map)
+                .toList();
     }
 
     @Override
     public UserResponse findByUsername(String username){
         User user = usersRepository.findByUsername(username);
-        if(user == null) throw new UserNotFoundException("User not found");
+        if(user == null)
+            throw new UserNotFoundException("User not found");
         return map(user);
     }
 
     @Override
-    public Stream<UserResponse> findAll(){
+    public List<UserResponse> findAll(){
         List<User> users = usersRepository.findAll();
         if (users.isEmpty()) throw new UserNotFoundException("User not found");
         return users
                 .stream()
-                .map(Mapper::map);
+                .map(Mapper::map)
+                .toList();
     }
 
     @Override
@@ -67,7 +66,24 @@ public class UserServiceImpl implements UserService{
         return map(user);
     }
 
+    @Override
     public void deleteById(String id) {
+        if (!usersRepository.existsById(id))
+            throw new UserNotFoundException("User not found");
         usersRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteByUsername(String username) {
+        if (!usersRepository.existsByUsername(username))
+            throw new UserNotFoundException("User not found");
+        usersRepository.deleteByUsername(username);
+    }
+
+    @Override
+    public void deleteAll(){
+        if (usersRepository.count() == 0)
+            throw new UserNotFoundException("No user found!");
+        usersRepository.deleteAll();
     }
 }
