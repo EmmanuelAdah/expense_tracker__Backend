@@ -8,13 +8,26 @@ import lombok.Data;
 public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private long id;
 
+    @Column(nullable = false)
     private String userId;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private double amount;
+
+    @Column(nullable = false)
     private String category;
+
+    @Column(nullable = false)
     private Type type;
-    private String dateAdded;
+
+    @Column(nullable = false)
+    private String createdAt;
+
+    @Column(nullable = false)
     private String dueDate;
 }
