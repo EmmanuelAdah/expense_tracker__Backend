@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class AddUserResponse {
     private String firstName;
     private String lastName;
-    private String userId;
+    private long userId;
     private String email;
     private String username;
 
