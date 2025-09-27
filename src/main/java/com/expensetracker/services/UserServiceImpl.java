@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<UserResponse> findById(String userId){
+    public List<UserResponse> findById(Long userId){
         Optional<User> user = usersRepository.findById(userId);
         user.orElseThrow(()-> new RuntimeException("User not found"));
         return user.stream()
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void deleteById(String id) {
+    public void deleteById(Long id) {
         if (!usersRepository.existsById(id))
             throw new UserNotFoundException("User not found");
         usersRepository.deleteById(id);
