@@ -13,11 +13,11 @@ import java.util.stream.Stream;
 public interface UserService {
 
     AddUserResponse registerUser(AddUserRequest request);
-    List<UserResponse> findById(String userId);
+    List<UserResponse> findById(Long userId);
     UserResponse findByUsername(String username);
     List<UserResponse> findAll();
     UserResponse userLogin(LoginRequest loginRequest);
-    void deleteById(String id);
+    void deleteById(Long id);
     void deleteByUsername(String username);
     void deleteAll();
 }
