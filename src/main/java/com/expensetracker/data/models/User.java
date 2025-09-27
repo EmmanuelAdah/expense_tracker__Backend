@@ -1,16 +1,15 @@
 package com.expensetracker.data.models;
 
+import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Document(collection = "users")
+@Entity
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     private String firstname;
@@ -19,6 +18,6 @@ public class User {
     private String username;
     private String password;
 
-    @DBRef
+    @OneToMany(mappedBy = "userId")
     private List<Expense> expenses = new ArrayList<>();
 }
