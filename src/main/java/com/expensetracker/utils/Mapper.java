@@ -46,7 +46,7 @@ public class Mapper {
         expense.setName(request.getName());
         expense.setAmount(request.getAmount());
         expense.setCategory(request.getCategory());
-        expense.setDateAdded(String.valueOf(LocalDate.now()));
+        expense.setCreatedAt(String.valueOf(LocalDate.now()));
         expense.setDueDate(request.getDueDate());
         expense.setType(request.getType());
         return expense;
