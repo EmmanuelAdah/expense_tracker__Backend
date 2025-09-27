@@ -17,17 +17,17 @@ public class UserController {
     private UserServiceImpl userServiceImpl;
 
     @PostMapping("/registerUser")
-    public ResponseEntity<AddUserResponse> registerUser(AddUserRequest request){
+    public ResponseEntity<AddUserResponse> registerUser(@RequestBody AddUserRequest request){
         return ResponseEntity.ok(userServiceImpl.registerUser(request));
     }
 
     @GetMapping("/findById")
-    public ResponseEntity<List<UserResponse>> findById(String userId){
+    public ResponseEntity<List<UserResponse>> findById(@RequestParam Long userId){
         return ResponseEntity.ok(userServiceImpl.findById(userId));
     }
 
     @GetMapping("/findByUsername")
-    public ResponseEntity<UserResponse> findByUsername(String username){
+    public ResponseEntity<UserResponse> findByUsername(@RequestParam String username){
         return ResponseEntity.ok(userServiceImpl.findByUsername(username));
     }
 
@@ -37,17 +37,17 @@ public class UserController {
     }
 
     @PostMapping("/userLogin")
-    public UserResponse userLogin(LoginRequest loginRequest){
+    public UserResponse userLogin(@RequestBody LoginRequest loginRequest){
         return userServiceImpl.userLogin(loginRequest);
     }
 
     @DeleteMapping("/deleteById")
-    public void deleteById(String id){
+    public void deleteById(@RequestParam Long id){
         userServiceImpl.deleteById(id);
     }
 
     @DeleteMapping("/deleteByUsername")
-    public void deleteByUsername(String username){
+    public void deleteByUsername(@RequestParam String username){
         userServiceImpl.deleteByUsername(username);
     }
 
