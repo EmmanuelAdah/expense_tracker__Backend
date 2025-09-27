@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 public class UserResponse {
-    private String userId;
+    private long userId;
     private String email;
     private String username;
 }
