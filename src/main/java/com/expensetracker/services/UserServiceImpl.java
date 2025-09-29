@@ -1,7 +1,7 @@
 package com.expensetracker.services;
 
 import com.expensetracker.data.models.User;
-import com.expensetracker.data.repositories.UsersRepository;
+import com.expensetracker.data.repositories.UserRepository;
 import com.expensetracker.dtos.requests.AddUserRequest;
 import com.expensetracker.dtos.requests.LoginRequest;
 import com.expensetracker.dtos.response.AddUserResponse;
@@ -14,24 +14,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
-
 import static com.expensetracker.utils.Mapper.*;
 
 @Service
 public class UserServiceImpl implements UserService{
     @Autowired
-    private UsersRepository usersRepository;
+    private UserRepository userRepository;
 
     @Override
     public AddUserResponse registerUser(AddUserRequest request){
-        User user = usersRepository.save(mapUser(request));
+        User user = userRepository.save(mapUser(request));
         return mapResponse(user);
     }
 
     @Override
     public List<UserResponse> findById(Long userId){
-        Optional<User> user = usersRepository.findById(userId);
+        Optional<User> user = userRepository.findById(userId);
         user.orElseThrow(()-> new RuntimeException("User not found"));
         return user.stream()
                 .map(Mapper::map)
@@ -40,7 +38,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserResponse findByUsername(String username){
-        User user = usersRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
         if(user == null)
             throw new UserNotFoundException("User not found");
         return map(user);
@@ -48,7 +46,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<UserResponse> findAll(){
-        List<User> users = usersRepository.findAll();
+        List<User> users = userRepository.findAll();
         if (users.isEmpty()) throw new UserNotFoundException("User not found");
         return users
                 .stream()
@@ -58,7 +56,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserResponse userLogin(LoginRequest loginRequest) {
-        User user = usersRepository.findByUsername(loginRequest.getUsername());
+        User user = userRepository.findByUsername(loginRequest.getUsername());
         if(user == null) throw new InvalidLoginCredentialsException("Invalid username or password");
 
         if(!PasswordEncoder.checkPassword(loginRequest.getPassword(), user.getPassword()))
@@ -68,22 +66,22 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void deleteById(Long id) {
-        if (!usersRepository.existsById(id))
+        if (!userRepository.existsById(id))
             throw new UserNotFoundException("User not found");
-        usersRepository.deleteById(id);
+        userRepository.deleteById(id);
     }
 
     @Override
     public void deleteByUsername(String username) {
-        if (!usersRepository.existsByUsername(username))
+        if (!userRepository.existsByUsername(username))
             throw new UserNotFoundException("User not found");
-        usersRepository.deleteByUsername(username);
+        userRepository.deleteByUsername(username);
     }
 
     @Override
     public void deleteAll(){
-        if (usersRepository.count() == 0)
+        if (userRepository.count() == 0)
             throw new UserNotFoundException("No user found!");
-        usersRepository.deleteAll();
+        userRepository.deleteAll();
     }
 }
