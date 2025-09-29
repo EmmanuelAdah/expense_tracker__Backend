@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table
 public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,6 +24,7 @@ public class Expense {
     private String category;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Type type;
 
     @Column(nullable = false)
