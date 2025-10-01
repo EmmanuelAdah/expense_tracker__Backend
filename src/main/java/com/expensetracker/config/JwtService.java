@@ -1,5 +1,6 @@
 package com.expensetracker.config;
 
+import com.expensetracker.data.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -7,6 +8,8 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import java.security.Key;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,20 +26,20 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    //   To generate token without having to extract claims but from user details
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
-    }
-
     //    To generate token for a user
-    public String generateToken(Map<String, Object> extraClaims,
-                                UserDetails userDetails) {
-        return Jwts
-                .builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+    public String generateToken(User user) {
+        Map<String, Object> claims = new HashMap<>();
+
+        claims.put("username", user.getUsername());
+        claims.put("email", user.getEmail());
+        claims.put("password", user.getPassword());
+        Instant now = Instant.now();
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(user.getUsername())
+                .setIssuedAt(Date.from(now))
+                .setExpiration(Date.from(now.plus(Duration.ofHours(24))))
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
