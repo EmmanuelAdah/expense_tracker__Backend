@@ -4,7 +4,6 @@ import com.expensetracker.data.models.Expense;
 import com.expensetracker.data.models.User;
 import com.expensetracker.data.repositories.ExpenseRepository;
 import com.expensetracker.data.repositories.UserRepository;
-import com.expensetracker.data.repositories.UserRepository;
 import com.expensetracker.dtos.requests.AddExpenseRequest;
 import com.expensetracker.dtos.response.AddExpenseResponse;
 import com.expensetracker.exceptions.UserNotFoundException;
@@ -24,11 +23,11 @@ public class ExpenseServiceImpl implements ExpenseService{
     @Override
     public AddExpenseResponse saveExpense(AddExpenseRequest request) {
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new UserNotFoundException("No such user found!"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Expense expense = expenseRepository.save(mapExpense(request));
         user.getExpenses().add(expense);
-        usersRepository.save(user);
+        userRepository.save(user);
         return map(expense);
     }
 }
