@@ -1,6 +1,6 @@
 package com.expensetracker.exceptions;
 
-public class InvalidLoginCredentialsException extends UserException {
+public class InvalidLoginCredentialsException extends RuntimeException {
     public InvalidLoginCredentialsException(String message) {
         super(message);
     }
