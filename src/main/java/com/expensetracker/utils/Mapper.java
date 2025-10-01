@@ -3,7 +3,7 @@ package com.expensetracker.utils;
 import com.expensetracker.data.models.Expense;
 import com.expensetracker.data.models.User;
 import com.expensetracker.dtos.requests.AddExpenseRequest;
-import com.expensetracker.dtos.requests.AddUserRequest;
+import com.expensetracker.dtos.requests.RegisterRequest;
 import com.expensetracker.dtos.response.AddExpenseResponse;
 import com.expensetracker.dtos.response.AddUserResponse;
 import com.expensetracker.dtos.response.UserResponse;
@@ -13,7 +13,7 @@ import static com.expensetracker.utils.PasswordEncoder.hashPassword;
 
 public class Mapper {
 
-    public static User mapUser(AddUserRequest request){
+    public static User mapUser(RegisterRequest request){
         User user = new User();
         user.setFirstname(request.getFirstname());
         user.setLastname(request.getLastname());
