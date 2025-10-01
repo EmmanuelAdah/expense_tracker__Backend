@@ -2,8 +2,8 @@ package com.expensetracker.services;
 
 import com.expensetracker.data.models.User;
 import com.expensetracker.data.repositories.UserRepository;
-import com.expensetracker.dtos.requests.AddUserRequest;
 import com.expensetracker.dtos.requests.LoginRequest;
+import com.expensetracker.dtos.requests.RegisterRequest;
 import com.expensetracker.dtos.response.AddUserResponse;
 import com.expensetracker.dtos.response.UserResponse;
 import com.expensetracker.exceptions.InvalidLoginCredentialsException;
@@ -13,7 +13,6 @@ import com.expensetracker.utils.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.Optional;
 import static com.expensetracker.utils.Mapper.*;
 
 @Service
@@ -22,26 +21,23 @@ public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
 
     @Override
-    public AddUserResponse registerUser(AddUserRequest request){
+    public AddUserResponse registerUser(RegisterRequest request){
         User user = userRepository.save(mapUser(request));
         return mapResponse(user);
     }
 
     @Override
-    public List<UserResponse> findById(Long userId){
-        Optional<User> user = userRepository.findById(userId);
-        user.orElseThrow(()-> new RuntimeException("User not found"));
-        return user.stream()
-                .map(Mapper::map)
-                .toList();
+    public UserResponse findById(Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        return map(user);
     }
 
     @Override
     public UserResponse findByUsername(String username){
-        User user = userRepository.findByUsername(username);
-        if(user == null)
-            throw new UserNotFoundException("User not found");
-        return map(user);
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+       return map(user);
     }
 
     @Override
@@ -56,8 +52,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserResponse userLogin(LoginRequest loginRequest) {
-        User user = userRepository.findByUsername(loginRequest.getUsername());
-        if(user == null) throw new InvalidLoginCredentialsException("Invalid username or password");
+        User user = userRepository.findByUsername(loginRequest.getUsername())
+                .orElseThrow(() -> new InvalidLoginCredentialsException("Invalid username or password"));
 
         if(!PasswordEncoder.checkPassword(loginRequest.getPassword(), user.getPassword()))
             throw new InvalidLoginCredentialsException("Invalid username or password");
