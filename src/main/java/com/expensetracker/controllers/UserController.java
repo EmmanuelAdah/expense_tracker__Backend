@@ -1,7 +1,7 @@
 package com.expensetracker.controllers;
 
-import com.expensetracker.dtos.requests.AddUserRequest;
 import com.expensetracker.dtos.requests.LoginRequest;
+import com.expensetracker.dtos.requests.RegisterRequest;
 import com.expensetracker.dtos.response.AddUserResponse;
 import com.expensetracker.dtos.response.UserResponse;
 import com.expensetracker.services.UserServiceImpl;
@@ -17,13 +17,13 @@ public class UserController {
     private UserServiceImpl userServiceImpl;
 
     @PostMapping("/registerUser")
-    public ResponseEntity<AddUserResponse> registerUser(@RequestBody AddUserRequest request){
+    public ResponseEntity<AddUserResponse> registerUser(@RequestBody RegisterRequest request){
         return ResponseEntity.ok(userServiceImpl.registerUser(request));
     }
 
     @GetMapping("/findById")
-    public ResponseEntity<List<UserResponse>> findById(@RequestParam Long userId){
-        return ResponseEntity.ok(userServiceImpl.findById(userId));
+    public ResponseEntity<UserResponse> findById(@RequestParam Long userId){
+        return ResponseEntity.ok().body(userServiceImpl.findById(userId));
     }
 
     @GetMapping("/findByUsername")
