@@ -4,11 +4,9 @@ import com.expensetracker.data.models.Expense;
 import com.expensetracker.data.models.User;
 import com.expensetracker.dtos.requests.AddExpenseRequest;
 import com.expensetracker.dtos.requests.RegisterRequest;
-import com.expensetracker.dtos.response.AddExpenseResponse;
-import com.expensetracker.dtos.response.AddUserResponse;
+import com.expensetracker.dtos.response.ExpenseResponse;
 import com.expensetracker.dtos.response.UserResponse;
 import java.time.LocalDate;
-
 import static com.expensetracker.utils.PasswordEncoder.hashPassword;
 
 public class Mapper {
@@ -21,16 +19,6 @@ public class Mapper {
         user.setUsername(request.getUsername());
         user.setPassword(hashPassword(request.getPassword()));
         return user;
-    }
-
-    public static AddUserResponse mapResponse(User user){
-        AddUserResponse response = new AddUserResponse();
-        response.setFirstName(user.getFirstname());
-        response.setLastName(user.getLastname());
-        response.setUserId(user.getId());
-        response.setEmail(user.getEmail());
-        response.setUsername(user.getUsername());
-        return response;
     }
 
     public static UserResponse map(User user){
@@ -52,8 +40,8 @@ public class Mapper {
         return expense;
     }
 
-    public static AddExpenseResponse map(Expense expense){
-        AddExpenseResponse response = new AddExpenseResponse();
+    public static ExpenseResponse map(Expense expense){
+        ExpenseResponse response = new ExpenseResponse();
         response.setId(expense.getId());
         response.setName(expense.getName());
         response.setAmount(expense.getAmount());
