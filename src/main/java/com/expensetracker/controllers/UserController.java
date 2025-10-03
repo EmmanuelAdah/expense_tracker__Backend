@@ -2,7 +2,6 @@ package com.expensetracker.controllers;
 
 import com.expensetracker.dtos.requests.LoginRequest;
 import com.expensetracker.dtos.requests.RegisterRequest;
-import com.expensetracker.dtos.response.AddUserResponse;
 import com.expensetracker.dtos.response.UserResponse;
 import com.expensetracker.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ public class UserController {
     private UserServiceImpl userServiceImpl;
 
     @PostMapping("/registerUser")
-    public ResponseEntity<AddUserResponse> registerUser(@RequestBody RegisterRequest request){
+    public ResponseEntity<UserResponse> registerUser(@RequestBody RegisterRequest request){
         return ResponseEntity.ok(userServiceImpl.registerUser(request));
     }
 
