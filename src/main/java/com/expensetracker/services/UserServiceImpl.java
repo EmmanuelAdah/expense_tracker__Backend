@@ -4,26 +4,26 @@ import com.expensetracker.data.models.User;
 import com.expensetracker.data.repositories.UserRepository;
 import com.expensetracker.dtos.requests.LoginRequest;
 import com.expensetracker.dtos.requests.RegisterRequest;
-import com.expensetracker.dtos.response.AddUserResponse;
 import com.expensetracker.dtos.response.UserResponse;
 import com.expensetracker.exceptions.InvalidLoginCredentialsException;
 import com.expensetracker.exceptions.UserNotFoundException;
 import com.expensetracker.utils.Mapper;
 import com.expensetracker.utils.PasswordEncoder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import static com.expensetracker.utils.Mapper.*;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public AddUserResponse registerUser(RegisterRequest request){
+    public UserResponse registerUser(RegisterRequest request){
         User user = userRepository.save(mapUser(request));
-        return mapResponse(user);
+        return map(user);
     }
 
     @Override
