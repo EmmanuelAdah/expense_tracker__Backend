@@ -1,5 +1,7 @@
-package com.expensetracker.config;
+package com.expensetracker.filter;
 
+import com.expensetracker.services.JwtService;
+import com.expensetracker.services.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,27 +19,30 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+//    Extends OncePerRequestFilter because it's meant to execute once per incoming request
+
     private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain)  throws ServletException, IOException {
+                                    @NonNull FilterChain filterChain)
+            throws ServletException, IOException {
+
         final String authorizationHeader = request.getHeader("Authorization");
-        final String jwtToken;
-        final String userEmail;
 
         if  (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
-        jwtToken = authorizationHeader.substring(7);
-        userEmail = jwtService.extractUsername(jwtToken);
+
+        final String jwtToken = authorizationHeader.substring(7); // index 7 because "Bearer " is 7 characters long
+        final String username = jwtService.extractUsername(jwtToken);
 
         //   To check if the user is authenticated or not. i.e., the user is not connected
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             //   To check if the token is valid or not
             if (jwtService.isTokenValid(jwtToken, userDetails)) {
