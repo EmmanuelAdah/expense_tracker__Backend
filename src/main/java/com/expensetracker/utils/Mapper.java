@@ -34,7 +34,7 @@ public class Mapper {
         expense.setName(request.getName());
         expense.setAmount(request.getAmount());
         expense.setCategory(request.getCategory());
-        expense.setCreatedAt(String.valueOf(LocalDate.now()));
+        expense.setCreatedAt(LocalDate.now());
         expense.setDueDate(request.getDueDate());
         expense.setType(request.getType());
         return expense;
@@ -47,7 +47,7 @@ public class Mapper {
         response.setAmount(expense.getAmount());
         response.setCategory(expense.getCategory());
         response.setType(expense.getType());
-        response.setDateAdded(LocalDate.now().toString());
+        response.setDateAdded(LocalDate.now());
         response.setDueDate(expense.getDueDate());
         return response;
     }
