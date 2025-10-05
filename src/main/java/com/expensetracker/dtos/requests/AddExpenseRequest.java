@@ -8,10 +8,13 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
 @Data
 @Component
 public class AddExpenseRequest {
 
+    @NotBlank
     private long userId;
 
     @NotBlank()
@@ -19,12 +22,18 @@ public class AddExpenseRequest {
     private String name;
 
     @NotNull
-    private double amount;
+    @Size(message = "amount must be greater than 0")
+    private long amount;
 
+    @NotNull
     private String category;
+
+    @NotNull
     private Type type;
 
+    @NotNull
+    private LocalDate createdAt;
 
-    private String dateAdded;
-    private String dueDate;
+    @NotNull
+    private LocalDate dueDate;
 }

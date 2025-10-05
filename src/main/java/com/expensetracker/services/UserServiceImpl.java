@@ -10,7 +10,6 @@ import com.expensetracker.exceptions.UserNotFoundException;
 import com.expensetracker.utils.Mapper;
 import com.expensetracker.utils.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import static com.expensetracker.utils.Mapper.*;
