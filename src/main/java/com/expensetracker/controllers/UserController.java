@@ -4,6 +4,7 @@ import com.expensetracker.dtos.requests.LoginRequest;
 import com.expensetracker.dtos.requests.RegisterRequest;
 import com.expensetracker.dtos.response.UserResponse;
 import com.expensetracker.services.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,14 +12,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tracker")
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired
-    private UserServiceImpl userServiceImpl;
-
-    @PostMapping("/registerUser")
-    public ResponseEntity<UserResponse> registerUser(@RequestBody RegisterRequest request){
-        return ResponseEntity.ok(userServiceImpl.registerUser(request));
-    }
+    private final UserServiceImpl userServiceImpl;
 
     @GetMapping("/findById")
     public ResponseEntity<UserResponse> findById(@RequestParam Long userId){
