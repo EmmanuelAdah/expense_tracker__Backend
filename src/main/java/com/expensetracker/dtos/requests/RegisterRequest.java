@@ -12,18 +12,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterRequest {
 
-    @NotBlank(message = "")
+    @NotBlank(message = "firstname")
     private String firstname;
 
-    @NotBlank(message = "")
+    @NotBlank(message = "lastname")
     private String lastname;
 
-    @NotBlank(message = "")
+    @NotBlank(message = "email")
     private String email;
 
-    @NotBlank(message = "")
+    @NotBlank(message = "username")
     private String username;
 
-    @NotBlank(message = "")
+    @NotBlank(message = "password")
     private String password;
 }
