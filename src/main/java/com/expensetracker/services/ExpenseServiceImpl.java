@@ -6,15 +6,12 @@ import com.expensetracker.data.repositories.ExpenseRepository;
 import com.expensetracker.data.repositories.UserRepository;
 import com.expensetracker.dtos.requests.AddExpenseRequest;
 import com.expensetracker.dtos.response.ExpenseResponse;
+import com.expensetracker.exceptions.ExpenseNotFoundException;
 import com.expensetracker.exceptions.UserNotFoundException;
 import com.expensetracker.utils.Mapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Request;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-
 import static com.expensetracker.utils.Mapper.map;
 import static com.expensetracker.utils.Mapper.mapExpense;
 
@@ -52,5 +49,24 @@ public class ExpenseServiceImpl implements ExpenseService{
                 .stream()
                 .map(Mapper::map)
                 .toList();
+    }
+
+    @Override
+    public ExpenseResponse findById(Long expenseId) {
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new ExpenseNotFoundException("Expense not found"));
+        return map(expense);
+    }
+
+    @Override
+    public void deleteAllByUserId(Long userId) {
+        User user  = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.getExpenses().clear();
+    }
+
+    @Override
+    public void deleteAll() {
+        expenseRepository.deleteAll();
     }
 }
