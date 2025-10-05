@@ -5,10 +5,8 @@ import com.expensetracker.dtos.response.ExpenseResponse;
 import com.expensetracker.services.ExpenseServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -22,6 +20,11 @@ public class ExpenseController {
         return ResponseEntity.ok(expenseServiceImpl.saveExpense(request));
     }
 
+    @GetMapping("/findById")
+    public ResponseEntity<ExpenseResponse> findById(Long expenseId){
+        return ResponseEntity.ok(expenseServiceImpl.findById(expenseId));
+    }
+
     @GetMapping("/findNoteByUserId")
     public ResponseEntity<List<ExpenseResponse>> findNotesByUserId(Long userId){
         return ResponseEntity.ok(expenseServiceImpl.findByUserId(userId));
@@ -30,5 +33,15 @@ public class ExpenseController {
     @GetMapping("/findAllNotes")
     public ResponseEntity<List<ExpenseResponse>> findAll(){
         return ResponseEntity.ok(expenseServiceImpl.findAll());
+    }
+
+    @DeleteMapping("/deleteAllByUserId")
+    public void deleteAllByUserId(Long userId){
+        expenseServiceImpl.deleteAllByUserId(userId);
+    }
+
+    @DeleteMapping
+    public void deleteAll(){
+        expenseServiceImpl.deleteAll();
     }
 }
