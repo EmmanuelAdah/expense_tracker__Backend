@@ -1,6 +1,5 @@
 package com.expensetracker.services;
 
-import com.expensetracker.config.JwtService;
 import com.expensetracker.data.models.User;
 import com.expensetracker.data.repositories.UserRepository;
 import com.expensetracker.dtos.requests.AuthenticationRequest;
@@ -10,9 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import static com.expensetracker.utils.PasswordEncoder.hashPassword;
-
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +19,7 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
@@ -28,7 +27,7 @@ public class AuthenticationService {
                 .lastname(request.getLastname())
                 .email(request.getEmail())
                 .username(request.getUsername())
-                .password(hashPassword(request.getPassword()))
+                .password(passwordEncoder.encode(request.getPassword()))
                 .build();
 
         userRepository.save(user);
@@ -37,6 +36,8 @@ public class AuthenticationService {
                 .builder()
                 .token(jwtToken)
                 .build();
+
+    //  could as well do this - return new AuthenticationResponse(jwtToken)
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
