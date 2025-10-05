@@ -10,5 +10,8 @@ import java.util.List;
 public interface ExpenseService {
     ExpenseResponse saveExpense(AddExpenseRequest request);
     List<ExpenseResponse> findByUserId(Long userId);
+    ExpenseResponse findById(Long expenseId);
     List<ExpenseResponse> findAll();
+    void deleteAllByUserId(Long userId);
+    void deleteAll();
 }
