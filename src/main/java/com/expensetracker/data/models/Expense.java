@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @Entity
 @Table(name = "Expense")
@@ -14,9 +16,6 @@ public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    @Column(nullable = false)
-    private String userId;
 
     @Column(nullable = false)
     private String name;
@@ -32,8 +31,8 @@ public class Expense {
     private Type type;
 
     @Column(nullable = false)
-    private String createdAt;
+    private LocalDate createdAt;
 
     @Column(nullable = false)
-    private String dueDate;
+    private LocalDate dueDate;
 }
