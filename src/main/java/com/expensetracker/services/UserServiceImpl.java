@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResponse findById(Long userId){
+    public UserResponse findById(long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         return map(user);
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(long id) {
         if (!userRepository.existsById(id))
             throw new UserNotFoundException("User not found");
         userRepository.deleteById(id);
