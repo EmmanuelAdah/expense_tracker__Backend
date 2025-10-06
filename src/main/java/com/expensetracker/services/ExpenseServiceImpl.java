@@ -41,7 +41,7 @@ public class ExpenseServiceImpl implements ExpenseService{
     }
 
     @Override
-    public List<ExpenseResponse> findByUserId(Long userId) {
+    public List<ExpenseResponse> findByUserId(long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
