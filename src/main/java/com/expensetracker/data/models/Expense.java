@@ -14,8 +14,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Expense {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(nullable = false)
+    private long userId;
 
     @Column(nullable = false)
     private String name;
