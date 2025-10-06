@@ -1,11 +1,9 @@
 package com.expensetracker.controllers;
 
 import com.expensetracker.dtos.requests.LoginRequest;
-import com.expensetracker.dtos.requests.RegisterRequest;
 import com.expensetracker.dtos.response.UserResponse;
 import com.expensetracker.services.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -17,7 +15,7 @@ public class UserController {
     private final UserServiceImpl userServiceImpl;
 
     @GetMapping("/findById")
-    public ResponseEntity<UserResponse> findById(@RequestParam Long userId){
+    public ResponseEntity<UserResponse> findById(@RequestParam int userId){
         return ResponseEntity.ok().body(userServiceImpl.findById(userId));
     }
 
@@ -37,7 +35,7 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteById")
-    public void deleteById(@RequestParam Long id){
+    public void deleteById(@RequestParam long id){
         userServiceImpl.deleteById(id);
     }
 
