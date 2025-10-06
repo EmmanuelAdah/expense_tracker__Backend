@@ -10,11 +10,11 @@ import java.util.List;
 public interface UserService {
 
     UserResponse registerUser(RegisterRequest request);
-    UserResponse findById(Long userId);
+    UserResponse findById(long userId);
     UserResponse findByUsername(String username);
     List<UserResponse> findAll();
     UserResponse userLogin(LoginRequest loginRequest);
-    void deleteById(Long id);
+    void deleteById(long id);
     void deleteByUsername(String username);
     void deleteAll();
 }
