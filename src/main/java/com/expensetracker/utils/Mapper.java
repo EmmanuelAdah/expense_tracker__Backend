@@ -23,7 +23,7 @@ public class Mapper {
 
     public static UserResponse map(User user){
         UserResponse response = new UserResponse();
-        response.setUserId(user.getId());
+        response.setUserId(user.getUserId());
         response.setEmail(user.getEmail());
         response.setUsername(user.getUsername());
         return response;
@@ -31,6 +31,7 @@ public class Mapper {
 
     public static Expense mapExpense(AddExpenseRequest request) {
         Expense expense = new Expense();
+        expense.setUserId(request.getUserId());
         expense.setName(request.getName());
         expense.setAmount(request.getAmount());
         expense.setCategory(request.getCategory());
@@ -47,7 +48,7 @@ public class Mapper {
         response.setAmount(expense.getAmount());
         response.setCategory(expense.getCategory());
         response.setType(expense.getType());
-        response.setDateAdded(LocalDate.now());
+        response.setCreatedAt(LocalDate.now());
         response.setDueDate(expense.getDueDate());
         return response;
     }
