@@ -28,8 +28,11 @@ public class JwtService {
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
 
-        claims.put("username", user.getUsername());
+        claims.put("userId", user.getUserId());
+        claims.put("firstname", user.getFirstname());
+        claims.put("lastname", user.getLastname());
         claims.put("email", user.getEmail());
+        claims.put("username", user.getUsername());
         claims.put("password", user.getPassword());
         Instant now = Instant.now();
 
