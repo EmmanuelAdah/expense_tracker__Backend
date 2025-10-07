@@ -1,5 +1,6 @@
 package com.expensetracker.security;
 
+import com.expensetracker.config.ApplicationConfig;
 import com.expensetracker.filter.JwtAuthenticationFilter;
 import com.expensetracker.services.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import com.expensetracker.config.ApplicationConfig;
 
 @Configuration
 @EnableWebSecurity
@@ -21,20 +21,21 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final ApplicationConfig applicationConfig;
 
+
     // To filter http request upon client request
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
-                auth.requestMatchers("/api/tracker/auth/authenticate**","/api/tracker/auth/register**")
+                auth.requestMatchers("/**","/api/tracker/auth/register**")
                 .permitAll()
                 .anyRequest()
                 .authenticated())
                 .userDetailsService(userDetailsServiceImpl)
+                .authenticationProvider(applicationConfig.authenticationProvider())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(applicationConfig.authenticationProvider())
                 .addFilterBefore(jwtAuthFilter,
                         UsernamePasswordAuthenticationFilter.class);
 
