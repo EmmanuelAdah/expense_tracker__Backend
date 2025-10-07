@@ -40,8 +40,5 @@ public class ExpenseController {
         expenseServiceImpl.deleteAllByUserId(userId);
     }
 
-    @DeleteMapping
-    public void deleteAll(){
-        expenseServiceImpl.deleteAll();
-    }
+
 }
