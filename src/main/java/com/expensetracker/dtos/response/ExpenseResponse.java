@@ -14,6 +14,6 @@ public class ExpenseResponse {
     private double amount;
     private String category;
     private Type type;
-    private LocalDate dateAdded;
+    private LocalDate createdAt;
     private LocalDate dueDate;
 }
