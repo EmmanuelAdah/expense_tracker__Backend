@@ -1,6 +1,7 @@
 package com.expensetracker.services;
 
 import com.expensetracker.data.models.Type;
+import com.expensetracker.data.repositories.UserRepository;
 import com.expensetracker.dtos.requests.AddExpenseRequest;
 import com.expensetracker.dtos.requests.RegisterRequest;
 import com.expensetracker.dtos.response.UserResponse;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,6 +20,9 @@ class ExpenseServiceImplTest {
 
     @Autowired
     private ExpenseServiceImpl expenseServiceImpl;
+
+    @MockitoBean
+    public UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
