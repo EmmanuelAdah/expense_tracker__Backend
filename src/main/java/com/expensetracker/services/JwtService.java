@@ -3,6 +3,7 @@ package com.expensetracker.services;
 import com.expensetracker.data.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,15 +34,15 @@ public class JwtService {
         claims.put("lastname", user.getLastname());
         claims.put("email", user.getEmail());
         claims.put("username", user.getUsername());
-        claims.put("password", user.getPassword());
         Instant now = Instant.now();
 
         return Jwts.builder()
                 .claims(claims)
+                .setHeaderParam("typ", "JWT")
                 .subject(user.getUsername())
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plus(Duration.ofHours(24))))
-                .signWith(generateSignInKey())
+                .signWith(generateSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
