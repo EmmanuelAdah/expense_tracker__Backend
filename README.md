@@ -1,0 +1,1 @@
+App for managing and keeping track of expenses based on the daily activities. It's efficient most especially for salary earners and business personnel's. The back end is built with spring boot in line with authentication & authorization as well as spring security
