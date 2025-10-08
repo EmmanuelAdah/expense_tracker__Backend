@@ -3,13 +3,12 @@ package com.expensetracker.services;
 import com.expensetracker.data.models.User;
 import com.expensetracker.data.repositories.UserRepository;
 import com.expensetracker.dtos.requests.LoginRequest;
-import com.expensetracker.dtos.requests.RegisterRequest;
 import com.expensetracker.dtos.response.UserResponse;
 import com.expensetracker.exceptions.InvalidLoginCredentialsException;
 import com.expensetracker.exceptions.UserNotFoundException;
 import com.expensetracker.utils.Mapper;
-import com.expensetracker.utils.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import static com.expensetracker.utils.Mapper.*;
@@ -18,12 +17,6 @@ import static com.expensetracker.utils.Mapper.*;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
-
-    @Override
-    public UserResponse registerUser(RegisterRequest request){
-        User user = userRepository.save(mapUser(request));
-        return map(user);
-    }
 
     @Override
     public UserResponse findById(long userId){
@@ -37,6 +30,13 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
        return map(user);
+    }
+
+    @Override
+    public UserResponse findByEmail(String email){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        return map(user);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findByUsername(loginRequest.getUsername())
                 .orElseThrow(() -> new InvalidLoginCredentialsException("Invalid username or password"));
 
-        if(!PasswordEncoder.checkPassword(loginRequest.getPassword(), user.getPassword()))
+        if(!BCrypt.checkpw(loginRequest.getPassword(), user.getPassword()))
             throw new InvalidLoginCredentialsException("Invalid username or password");
         return map(user);
     }
