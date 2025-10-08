@@ -19,8 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final JwtAuthenticationFilter jwtAuthFilter;
-    private final ApplicationConfig applicationConfig;
-
+    private final ApplicationConfig appConfig;
 
     // To filter http request upon client request
     @Bean
@@ -33,7 +32,7 @@ public class SecurityConfig {
                 .anyRequest()
                 .authenticated())
                 .userDetailsService(userDetailsServiceImpl)
-                .authenticationProvider(applicationConfig.authenticationProvider())
+                .authenticationProvider(appConfig.authenticationProvider())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter,
