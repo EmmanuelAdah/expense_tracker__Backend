@@ -1,9 +1,9 @@
 services:
   db:
-    container_name: postgres-spring-boot
+    container_name: postgres
     image: postgres:latest
     environment:
-      POSTGRES_USER: root
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Emma007.
       PGDATA: /data/postgres
     volumes:
@@ -13,6 +13,14 @@ services:
     networks:
       - db
     restart: unless-stopped
+  expenseTracker:
+    container_name: expenseTracker
+
+  adminer:
+    image: adminer:latest
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
 
 networks:
   db:
