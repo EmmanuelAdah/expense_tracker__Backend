@@ -1,6 +1,6 @@
 package com.expensetracker.auth;
 
-import com.expensetracker.dtos.requests.AuthenticationRequest;
+import com.expensetracker.dtos.requests.LoginRequest;
 import com.expensetracker.dtos.requests.RegisterRequest;
 import com.expensetracker.dtos.response.AuthenticationResponse;
 import com.expensetracker.services.AuthenticationService;
@@ -26,7 +26,7 @@ public class AuthenticationController {
 
     @PostMapping("/authenticate/user")
     public ResponseEntity<AuthenticationResponse> authenticate(@Valid
-            @RequestBody AuthenticationRequest request){
+            @RequestBody LoginRequest request){
         return ResponseEntity.ok(authService.authenticate(request));
     }
 }
