@@ -5,6 +5,7 @@ import com.expensetracker.data.repositories.UserRepository;
 import com.expensetracker.dtos.requests.AuthenticationRequest;
 import com.expensetracker.dtos.requests.RegisterRequest;
 import com.expensetracker.dtos.response.AuthenticationResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,10 +22,11 @@ public class AuthenticationService {
     private final AuthenticationManager authManager;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
+                .firstname(request.getFirstname().toUpperCase())
+                .lastname(request.getLastname().toUpperCase())
                 .email(request.getEmail())
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -41,12 +43,13 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password"));
+
         authManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(),
                 request.getPassword())
         );
-        var user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException(request.getUsername() + " not found"));
 
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse
