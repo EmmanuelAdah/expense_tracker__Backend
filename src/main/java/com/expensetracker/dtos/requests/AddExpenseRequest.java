@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Data
 @Component
 public class AddExpenseRequest {
-
     @NotBlank
     private long userId;
 
