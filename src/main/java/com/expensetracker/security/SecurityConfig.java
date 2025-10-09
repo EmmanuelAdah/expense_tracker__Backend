@@ -23,21 +23,21 @@ public class SecurityConfig {
 
     // To filter http request upon client request
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth ->
-                auth.requestMatchers("/**","/api/tracker/auth/register**")
-                .permitAll()
-                .anyRequest()
-                .authenticated())
-                .userDetailsService(userDetailsServiceImpl)
-                .authenticationProvider(appConfig.authenticationProvider())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter,
-                        UsernamePasswordAuthenticationFilter.class);
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth ->
+            auth.requestMatchers("/api/tracker/auth/**")
+            .permitAll()
+            .anyRequest()
+            .authenticated())
+            .userDetailsService(userDetailsServiceImpl)
+            .authenticationProvider(appConfig.authenticationProvider())
+            .sessionManagement(session -> session
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(jwtAuthFilter,
+                    UsernamePasswordAuthenticationFilter.class);
 
-        return httpSecurity.build();
+        return http.build();
     }
 }
