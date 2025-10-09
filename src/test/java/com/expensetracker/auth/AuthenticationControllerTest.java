@@ -1,19 +1,20 @@
 package com.expensetracker.auth;
 
 import com.expensetracker.dtos.requests.RegisterRequest;
+import com.expensetracker.dtos.response.AuthenticationResponse;
 import com.expensetracker.services.AuthenticationService;
-import com.expensetracker.services.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
@@ -21,25 +22,12 @@ class AuthenticationControllerTest {
     @Mock
     private AuthenticationService authService;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
-
-    @Mock
-    private UserDetailsServiceImpl userDetailsService;
+    @MockitoBean
+    private AuthenticationManager authenticationManager;
 
     @InjectMocks
     private AuthenticationController controller;
 
-    private AuthenticationManager authenticationManager;
-
-    @BeforeEach
-    void setUp() {
-        controller = new AuthenticationController(authService);
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder);
-        authenticationManager = new ProviderManager(provider);
-    }
 
     @Test
     void userRegistrationTest() {
@@ -49,9 +37,22 @@ class AuthenticationControllerTest {
         request.setEmail("edo@gmail.com");
         request.setUsername("edo02");
         request.setPassword("12345");
-        if (log.isInfoEnabled()) {
-            log.info(controller.register(request).toString());
-        }
+
+        // Mock the expected response
+        AuthenticationResponse mockResponse = new AuthenticationResponse();
+        mockResponse.setToken("mocked-jwt-token");
+
+        Mockito.when(authService.register(any(RegisterRequest.class)))
+                .thenReturn(mockResponse);
+
+//        when(authService.register(any(RegisterRequest.class))).thenReturn(mockResponse);
+
+        AuthenticationResponse response = controller.register(request).getBody();
+
+        assertNotNull(response);
+        assertEquals("mocked-jwt-token", response.getToken());
+
+        log.info("Received token: {}", response.getToken());
     }
 
 }
