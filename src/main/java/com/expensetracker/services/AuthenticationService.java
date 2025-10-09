@@ -2,9 +2,10 @@ package com.expensetracker.services;
 
 import com.expensetracker.data.models.User;
 import com.expensetracker.data.repositories.UserRepository;
-import com.expensetracker.dtos.requests.AuthenticationRequest;
+import com.expensetracker.dtos.requests.LoginRequest;
 import com.expensetracker.dtos.requests.RegisterRequest;
 import com.expensetracker.dtos.response.AuthenticationResponse;
+import com.expensetracker.exceptions.InvalidLoginCredentialsException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,9 +43,12 @@ public class AuthenticationService {
     //  could as well do this - return new AuthenticationResponse(jwtToken)
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(LoginRequest request) {
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password"));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
+            throw new InvalidLoginCredentialsException("Invalid username or password");
 
         authManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(),
