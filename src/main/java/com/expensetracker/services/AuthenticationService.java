@@ -3,7 +3,7 @@ package com.expensetracker.services;
 import com.expensetracker.data.models.User;
 import com.expensetracker.data.repositories.UserRepository;
 import com.expensetracker.dtos.requests.LoginRequest;
-import com.expensetracker.dtos.requests.RegisterRequest;
+import com.expensetracker.dtos.requests.RegistrationRequest;
 import com.expensetracker.dtos.response.AuthenticationResponse;
 import com.expensetracker.exceptions.InvalidLoginCredentialsException;
 import jakarta.transaction.Transactional;
@@ -24,7 +24,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(RegistrationRequest request) {
         var user = User.builder()
                 .firstname(request.getFirstname().toUpperCase())
                 .lastname(request.getLastname().toUpperCase())
