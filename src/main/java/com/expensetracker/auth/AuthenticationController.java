@@ -1,7 +1,7 @@
 package com.expensetracker.auth;
 
 import com.expensetracker.dtos.requests.LoginRequest;
-import com.expensetracker.dtos.requests.RegisterRequest;
+import com.expensetracker.dtos.requests.RegistrationRequest;
 import com.expensetracker.dtos.response.AuthenticationResponse;
 import com.expensetracker.services.AuthenticationService;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ public class AuthenticationController {
 
     @PostMapping("/register/user")
     public ResponseEntity<AuthenticationResponse> register(@Valid
-            @RequestBody RegisterRequest request){
+            @RequestBody RegistrationRequest request){
         return ResponseEntity.ok(authService.register(request));
     }
 
