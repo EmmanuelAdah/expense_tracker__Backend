@@ -1,9 +1,10 @@
 package com.expensetracker.services;
 
 import com.expensetracker.data.models.User;
+import com.expensetracker.exceptions.TokenAlreadyExpiredException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,14 +13,10 @@ import javax.crypto.SecretKey;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
-    private final String SECRET_KEY =
-            "06904e8dc8b08f33602356eb35f78f8fc32284d09688a199ce463be4692c9626";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -27,24 +24,19 @@ public class JwtService {
 
     //    To generate token for a user
     public String generateToken(User user) {
-        Map<String, Object> claims = new HashMap<>();
-
-        claims.put("userId", user.getUserId());
-        claims.put("firstname", user.getFirstname());
-        claims.put("lastname", user.getLastname());
-        claims.put("email", user.getEmail());
-        claims.put("username", user.getUsername());
-        Instant now = Instant.now();
-
         return Jwts.builder()
-                .claims(claims)
-                .setHeaderParam("typ", "JWT")
                 .subject(user.getUsername())
-                .issuedAt(Date.from(now))
-                .expiration(Date.from(now.plus(Duration.ofHours(24))))
-                .signWith(generateSignInKey(), SignatureAlgorithm.HS256)
+                .issuedAt(new Date())
+                .expiration(Date.from(Instant.now()
+                        .plus(Duration.ofHours(24)))) // Token valid for 24 hours
+                .claim("userId", user.getUserId())
+                .claim("firstname", user.getFirstname())
+                .claim("lastname", user.getLastname())
+                .claim("email", user.getEmail())
+                .signWith(getSigningKey())
                 .compact();
     }
+
 
     //    To check if a token is valid
     public boolean isTokenValid(String token, UserDetails userDetails) {
@@ -54,6 +46,7 @@ public class JwtService {
 
     //    To check if a token is expired
     private boolean isTokenExpired(String token){
+        System.out.println(extractExpiration(token));
         return extractExpiration(token).before(new Date());
     }
 
@@ -71,16 +64,21 @@ public class JwtService {
 
     //    To extract claims from the client request
     public Claims extractAllClaims(String jwtToken) {
-        return Jwts
-                .parser()
-                .verifyWith(generateSignInKey())
-                .build()
-                .parseSignedClaims(jwtToken)
-                .getPayload();
+        try {
+            return Jwts
+                    .parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(jwtToken)
+                    .getPayload();
+        } catch (ExpiredJwtException ex) {
+            throw new TokenAlreadyExpiredException("Token expired at "+ ex.getClaims().getExpiration());
+        }
     }
 
-    public SecretKey generateSignInKey() {
-        byte[] keyBytes = Decoders.BASE64URL.decode(SECRET_KEY);
+    private SecretKey getSigningKey() {
+        String secretKey = "06904e8dc8b08f33602356eb35f78f8fc32284d09688a199ce463be4692c9626";
+        byte[] keyBytes = Decoders.BASE64URL.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
