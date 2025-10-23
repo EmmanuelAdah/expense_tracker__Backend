@@ -1,7 +1,7 @@
 package com.expensetracker.auth;
 
 import com.expensetracker.dtos.requests.LoginRequest;
-import com.expensetracker.dtos.requests.RegisterRequest;
+import com.expensetracker.dtos.requests.RegistrationRequest;
 import com.expensetracker.dtos.response.AuthenticationResponse;
 import com.expensetracker.services.AuthenticationService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,11 +20,11 @@ import static org.mockito.ArgumentMatchers.any;
 @ExtendWith(MockitoExtension.class)
 @Slf4j
 class AuthenticationControllerTest {
-    @Mock
-    private AuthenticationService authService;
-
     @MockitoBean
     private AuthenticationManager authenticationManager;
+
+    @Mock
+    private AuthenticationService authService;
 
     @InjectMocks
     private AuthenticationController controller;
@@ -32,7 +32,7 @@ class AuthenticationControllerTest {
 
     @Test
     void userRegistrationTest() {
-        RegisterRequest request = new RegisterRequest();
+        RegistrationRequest request = new RegistrationRequest();
         request.setFirstname("John");
         request.setLastname("Doe");
         request.setEmail("edo@gmail.com");
@@ -43,7 +43,7 @@ class AuthenticationControllerTest {
         AuthenticationResponse mockResponse = new AuthenticationResponse();
         mockResponse.setToken("mocked-jwt-token");
 
-        Mockito.when(authService.register(any(RegisterRequest.class)))
+        Mockito.when(authService.register(any(RegistrationRequest.class)))
                 .thenReturn(mockResponse);
 
 //        when(authService.register(any(RegisterRequest.class))).thenReturn(mockResponse);
@@ -71,10 +71,10 @@ class AuthenticationControllerTest {
 
 //        when(authService.register(any(RegisterRequest.class))).thenReturn(mockResponse);
 
-        AuthenticationResponse response = controller.register(request).getBody();
+        AuthenticationResponse response = controller.login(request).getBody();
 
         assertNotNull(response);
-        assertEquals("mocked-jwt-token", response.getToken());
+        assertEquals("token was generated successfully", response.getToken());
 
         log.info("Received token: {}", response.getToken());
     }
