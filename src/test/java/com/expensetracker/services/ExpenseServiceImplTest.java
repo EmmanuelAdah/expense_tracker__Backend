@@ -1,29 +1,29 @@
 package com.expensetracker.services;
 
 import com.expensetracker.data.models.Type;
-import com.expensetracker.data.repositories.UserRepository;
 import com.expensetracker.dtos.requests.AddExpenseRequest;
-import com.expensetracker.dtos.requests.RegisterRequest;
+import com.expensetracker.dtos.requests.RegistrationRequest;
 import com.expensetracker.dtos.response.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import java.time.LocalDate;
 
 @SpringBootTest
 class ExpenseServiceImplTest {
-    @MockitoBean
-    private UserServiceImpl userServiceImpl;
 
-    @MockitoBean
-    private ExpenseServiceImpl expenseServiceImpl;
-
-    @MockitoBean
-    public UserRepository userRepository;
+    @Mock
+    public UserServiceImpl userServiceImpl;
 
     @MockitoBean
     private AuthenticationService authenticationService;
+
+    @InjectMocks
+    private ExpenseServiceImpl expenseServiceImpl;
+
 
     @BeforeEach
     void setUp() {
@@ -32,7 +32,7 @@ class ExpenseServiceImplTest {
 
     @Test
     void saveExpense() {
-        RegisterRequest request = new RegisterRequest();
+        RegistrationRequest request = new RegistrationRequest();
         request.setFirstname("firstname");
         request.setLastname("lastname");
         request.setEmail("email");
@@ -55,15 +55,4 @@ class ExpenseServiceImplTest {
 //                .isEqualTo(1);
     }
 
-    @Test
-    void findAll() {
-    }
-
-    @Test
-    void findByUserId() {
-    }
-
-    @Test
-    void findById() {
-    }
 }
