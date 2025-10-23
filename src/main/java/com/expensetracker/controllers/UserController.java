@@ -3,7 +3,6 @@ package com.expensetracker.controllers;
 import com.expensetracker.dtos.requests.LoginRequest;
 import com.expensetracker.dtos.response.UserResponse;
 import com.expensetracker.services.UserServiceImpl;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +15,8 @@ public class UserController {
     private final UserServiceImpl userServiceImpl;
 
     @GetMapping("/findById")
-    public ResponseEntity<UserResponse> findById(@RequestParam int userId){
-        return ResponseEntity.ok().body(userServiceImpl.findById(userId));
+    public ResponseEntity<UserResponse> findById(@RequestParam long userId) {
+        return ResponseEntity.ok(userServiceImpl.findById(userId));
     }
 
     @GetMapping("/findByUsername")
