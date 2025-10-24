@@ -1,9 +1,6 @@
 package com.expensetracker.dtos.requests;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,9 +25,10 @@ public class RegistrationRequest {
     private String lastname;
 
     @NotEmpty(message = "email is mandatory")
-    @NotBlank(message = "email")
+    @NotBlank(message = "email is mandatory")
     @Size(min = 10, max = 30, message = "email must be between {min} and {max} long")
-//    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$\n")
+    @Email(message = "Invald email format")
+    //    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$\n")
     private String email;
 
     @NotEmpty(message = "username is mandatory")
