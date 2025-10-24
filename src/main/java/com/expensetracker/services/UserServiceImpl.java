@@ -2,13 +2,10 @@ package com.expensetracker.services;
 
 import com.expensetracker.data.models.User;
 import com.expensetracker.data.repositories.UserRepository;
-import com.expensetracker.dtos.requests.LoginRequest;
 import com.expensetracker.dtos.response.UserResponse;
-import com.expensetracker.exceptions.InvalidLoginCredentialsException;
 import com.expensetracker.exceptions.UserNotFoundException;
 import com.expensetracker.utils.Mapper;
 import lombok.RequiredArgsConstructor;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import static com.expensetracker.utils.Mapper.*;
@@ -53,20 +50,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResponse userLogin(LoginRequest loginRequest) {
-        User user = userRepository.findByUsername(loginRequest.getUsername())
-                .orElseThrow(() -> new InvalidLoginCredentialsException("Invalid username or password"));
-
-        if(!BCrypt.checkpw(loginRequest.getPassword(), user.getPassword()))
-            throw new InvalidLoginCredentialsException("Invalid username or password");
-        return map(user);
-    }
-
-    @Override
-    public void deleteById(long id) {
-        if (!userRepository.existsById(id))
+    public void deleteById(long userId) {
+        if (!userRepository.existsById(userId))
             throw new UserNotFoundException("User not found");
-        userRepository.deleteById(id);
+        userRepository.deleteById(userId);
     }
 
     @Override
