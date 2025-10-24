@@ -1,6 +1,5 @@
 package com.expensetracker.controllers;
 
-import com.expensetracker.dtos.requests.LoginRequest;
 import com.expensetracker.dtos.response.UserResponse;
 import com.expensetracker.services.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -34,14 +33,9 @@ public class UserController {
         return ResponseEntity.ok(userServiceImpl.findAll());
     }
 
-    @PostMapping("/userLogin")
-    public UserResponse userLogin(@RequestBody LoginRequest loginRequest){
-        return userServiceImpl.userLogin(loginRequest);
-    }
-
     @DeleteMapping("/deleteById")
-    public void deleteById(@RequestParam long id){
-        userServiceImpl.deleteById(id);
+    public void deleteById(@RequestParam long userId){
+        userServiceImpl.deleteById(userId);
     }
 
     @DeleteMapping("/deleteByUsername")
