@@ -1,4 +1,4 @@
-package com.expensetracker.auth;
+package com.expensetracker.controllers;
 
 import com.expensetracker.dtos.requests.LoginRequest;
 import com.expensetracker.dtos.requests.RegistrationRequest;
