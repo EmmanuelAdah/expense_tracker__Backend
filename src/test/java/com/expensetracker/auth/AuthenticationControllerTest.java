@@ -1,5 +1,6 @@
 package com.expensetracker.auth;
 
+import com.expensetracker.controllers.AuthenticationController;
 import com.expensetracker.dtos.requests.LoginRequest;
 import com.expensetracker.dtos.requests.RegistrationRequest;
 import com.expensetracker.dtos.response.AuthenticationResponse;
