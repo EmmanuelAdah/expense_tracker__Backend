@@ -7,7 +7,7 @@ import java.util.List;
 
 @Service
 public interface ExpenseService {
-    ExpenseResponse saveExpense(AddExpenseRequest request);
+    ExpenseResponse saveExpense(AddExpenseRequest request, String username);
     ExpenseResponse findById(Long expenseId);
     List<ExpenseResponse> findByUserId(long userId);
     List<ExpenseResponse> findAll();
