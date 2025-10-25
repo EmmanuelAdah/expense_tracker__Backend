@@ -17,9 +17,9 @@ public class Mapper {
         return response;
     }
 
-    public static Expense mapExpense(AddExpenseRequest request) {
+    public static Expense mapExpense(AddExpenseRequest request, long userId) {
         Expense expense = new Expense();
-        expense.setUserId(request.getUserId());
+        expense.setUserId(userId);
         expense.setName(request.getName().toUpperCase());
         expense.setAmount(request.getAmount());
         expense.setCategory(request.getCategory());
