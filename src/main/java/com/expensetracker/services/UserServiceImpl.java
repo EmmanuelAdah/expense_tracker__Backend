@@ -69,4 +69,14 @@ public class UserServiceImpl implements UserService{
             throw new UserNotFoundException("No user found!");
         userRepository.deleteAll();
     }
+
+    @Override
+    public long setIncome(String username, long income) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        user.setIncome(income);
+        User savedUser = userRepository.save(user);
+        return savedUser.getIncome();
+    }
 }
