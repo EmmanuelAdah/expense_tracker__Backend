@@ -17,16 +17,18 @@ import static com.expensetracker.utils.Mapper.mapExpense;
 
 @Service
 @RequiredArgsConstructor
-public class ExpenseServiceImpl implements ExpenseService{
+public class ExpenseServiceImpl implements ExpenseService {
     private final UserRepository userRepository;
     private final ExpenseRepository expenseRepository;
 
     @Override
-    public ExpenseResponse saveExpense(AddExpenseRequest request) {
-        User user = userRepository.findById(request.getUserId())
+    public ExpenseResponse saveExpense(AddExpenseRequest request, String username) {
+
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        Expense expense = expenseRepository.save(mapExpense(request));
+        Expense expense = expenseRepository.save(mapExpense(request, user.getUserId()));
+
         user.getExpenses().add(expense);
         userRepository.save(user);
         return map(expense);
