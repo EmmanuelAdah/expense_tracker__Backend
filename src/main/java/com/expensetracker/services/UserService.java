@@ -14,4 +14,5 @@ public interface UserService {
     void deleteById(long id);
     void deleteByUsername(String username);
     void deleteAll();
+    long setIncome(String username, long income);
 }

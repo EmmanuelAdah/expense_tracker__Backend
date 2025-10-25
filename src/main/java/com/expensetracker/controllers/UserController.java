@@ -4,6 +4,7 @@ import com.expensetracker.dtos.response.UserResponse;
 import com.expensetracker.services.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class UserController {
         return ResponseEntity.ok(userServiceImpl.findById(userId));
     }
 
-    @GetMapping("/findByUsername")
+    @GetMapping("/find/Username")
     public ResponseEntity<UserResponse> findByUsername(@RequestParam String username){
         return ResponseEntity.ok(userServiceImpl.findByUsername(username));
     }
@@ -28,7 +29,7 @@ public class UserController {
         return ResponseEntity.ok(userServiceImpl.findByEmail(email));
     }
 
-    @GetMapping("/findAll")
+    @GetMapping("/find/All")
     public ResponseEntity<List<UserResponse>> findAll(){
         return ResponseEntity.ok(userServiceImpl.findAll());
     }
@@ -43,8 +44,15 @@ public class UserController {
         userServiceImpl.deleteByUsername(username);
     }
 
-    @DeleteMapping("/deleteAllUsers")
+    @DeleteMapping("/delete/Users")
     public void deleteAll(){
         userServiceImpl.deleteAll();
+    }
+
+    @PostMapping("/set/income")
+    public ResponseEntity<Long> setIncome(@RequestParam long income,
+                                          Authentication authentication){
+        String username = authentication.getName();
+        return ResponseEntity.ok(userServiceImpl.setIncome(username, income));
     }
 }
