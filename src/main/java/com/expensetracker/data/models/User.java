@@ -32,13 +32,15 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
 
-    private long income;
-
     @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
     private String password;
+
+    private double income;
+
+    private double balance;
 
     @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY ,cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expense> expenses = new ArrayList<>();
