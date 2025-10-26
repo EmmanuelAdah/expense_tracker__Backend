@@ -7,6 +7,7 @@ import com.expensetracker.data.repositories.UserRepository;
 import com.expensetracker.dtos.requests.AddExpenseRequest;
 import com.expensetracker.dtos.response.ExpenseResponse;
 import com.expensetracker.exceptions.ExpenseNotFoundException;
+import com.expensetracker.exceptions.InsufficientBalanceException;
 import com.expensetracker.exceptions.UserNotFoundException;
 import com.expensetracker.utils.Mapper;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +29,15 @@ public class ExpenseServiceImpl implements ExpenseService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         Expense expense = expenseRepository.save(mapExpense(request, user.getUserId()));
+        double amount = request.getAmount();
+        double balance = user.getBalance();
+
+        if (amount > balance)
+            throw new InsufficientBalanceException("Insufficient balance");
 
         user.getExpenses().add(expense);
+        user.setBalance(balance - amount);
+
         userRepository.save(user);
         return map(expense);
     }
