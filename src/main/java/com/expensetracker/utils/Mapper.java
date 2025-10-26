@@ -5,6 +5,8 @@ import com.expensetracker.data.models.User;
 import com.expensetracker.dtos.requests.AddExpenseRequest;
 import com.expensetracker.dtos.response.ExpenseResponse;
 import com.expensetracker.dtos.response.UserResponse;
+import com.expensetracker.exceptions.InvalidAmountException;
+
 import java.time.LocalDate;
 
 public class Mapper {
@@ -18,6 +20,9 @@ public class Mapper {
     }
 
     public static Expense mapExpense(AddExpenseRequest request, long userId) {
+        if (request.getAmount() <= 0)
+            throw new InvalidAmountException("Amount must be greater than 0");
+
         Expense expense = new Expense();
         expense.setUserId(userId);
         expense.setName(request.getName().toUpperCase());
