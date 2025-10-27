@@ -16,6 +16,8 @@ public class Mapper {
         response.setUserId(user.getUserId());
         response.setEmail(user.getEmail());
         response.setUsername(user.getUsername());
+        response.setBalance(user.getBalance());
+        response.setIncome(user.getIncome());
         return response;
     }
 
@@ -29,7 +31,6 @@ public class Mapper {
         expense.setAmount(request.getAmount());
         expense.setCategory(request.getCategory());
         expense.setCreatedAt(LocalDate.now());
-        expense.setDueDate(request.getDueDate());
         expense.setType(request.getType());
         return expense;
     }
@@ -42,7 +43,6 @@ public class Mapper {
         response.setCategory(expense.getCategory());
         response.setType(expense.getType());
         response.setCreatedAt(LocalDate.now());
-        response.setDueDate(expense.getDueDate());
         return response;
     }
 }
