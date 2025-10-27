@@ -4,6 +4,7 @@ import com.expensetracker.data.models.User;
 import com.expensetracker.data.repositories.UserRepository;
 import com.expensetracker.dtos.response.UserResponse;
 import com.expensetracker.exceptions.UserNotFoundException;
+import com.expensetracker.exceptions.invalidIncomeValueException;
 import com.expensetracker.utils.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -71,7 +72,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public long setIncome(String username, long income) {
+    public Double setIncome(String username, double income) {
+        if (income <= 0)
+            throw new invalidIncomeValueException("Income must be greater than 0");
+
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
