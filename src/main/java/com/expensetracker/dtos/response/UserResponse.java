@@ -9,4 +9,6 @@ public class UserResponse {
     private long userId;
     private String email;
     private String username;
+    private double balance;
+    private double income;
 }
