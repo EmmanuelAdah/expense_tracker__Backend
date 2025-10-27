@@ -3,6 +3,7 @@ package com.expensetracker.controllers;
 import com.expensetracker.dtos.requests.AddExpenseRequest;
 import com.expensetracker.dtos.response.ExpenseResponse;
 import com.expensetracker.services.ExpenseServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,18 +18,20 @@ public class ExpenseController {
     private final ExpenseServiceImpl expenseServiceImpl;
 
     @PostMapping("/addExpense")
-    public ResponseEntity<ExpenseResponse> addExpense(@RequestBody AddExpenseRequest request, Authentication authentication){
+    public ResponseEntity<ExpenseResponse> addExpense(@Valid @RequestBody
+                                                          AddExpenseRequest request,
+                                                      Authentication authentication){
         String username = authentication.getName();
         return ResponseEntity.ok(expenseServiceImpl.saveExpense(request, username));
     }
 
     @GetMapping("/findById")
-    public ResponseEntity<ExpenseResponse> findById(@RequestParam Long expenseId){
+    public ResponseEntity<ExpenseResponse> findById(@Valid @RequestParam Long expenseId){
         return ResponseEntity.ok(expenseServiceImpl.findById(expenseId));
     }
 
     @GetMapping("/findNoteByUserId")
-    public ResponseEntity<List<ExpenseResponse>> findNotesByUserId(@RequestParam Long userId){
+    public ResponseEntity<List<ExpenseResponse>> findNotesByUserId(@Valid @RequestParam Long userId){
         return ResponseEntity.ok(expenseServiceImpl.findByUserId(userId));
     }
 
@@ -38,7 +41,7 @@ public class ExpenseController {
     }
 
     @DeleteMapping("/deleteAllByUserId")
-    public void deleteAllByUserId(@RequestParam Long userId){
+    public void deleteAllByUserId(@Valid @RequestParam Long userId){
         expenseServiceImpl.deleteAllByUserId(userId);
     }
 }
