@@ -33,14 +33,16 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
 
-        userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
+        User savedUser = userRepository.save(user);
+        var token = jwtService.generateToken(user);
         return AuthenticationResponse
                 .builder()
-                .token(jwtToken)
+                .token(token)
+                .username(savedUser.getUsername())
+                .email(savedUser.getEmail())
                 .build();
 
-    //  could as well do this - return new AuthenticationResponse(jwtToken)
+    //  could as well do this - return new AuthenticationResponse(token)
     }
 
     public AuthenticationResponse authenticate(LoginRequest request) {
@@ -58,6 +60,8 @@ public class AuthenticationService {
         return AuthenticationResponse
                 .builder()
                 .token(jwtToken)
+                .username(user.getUsername())
+                .email(user.getEmail())
                 .build();
     }
 }
