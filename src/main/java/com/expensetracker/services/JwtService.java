@@ -22,7 +22,7 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    //    To generate token for a user
+    //    To generate a token for a user
     public String generateToken(User user) {
         return Jwts.builder()
                 .subject(user.getUsername())
