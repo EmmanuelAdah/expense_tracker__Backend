@@ -12,8 +12,6 @@ import java.time.LocalDate;
 @Data
 @Component
 public class AddExpenseRequest {
-    @NotBlank
-    private long userId;
 
     @NotBlank()
     @Size(min = 3, max = 100, message = "Name must be between {min} and {max} letters long")
@@ -24,14 +22,13 @@ public class AddExpenseRequest {
     private long amount;
 
     @NotNull
+    @Size(min = 3, max = 100, message = "Category must be between {min} and {max} letters long")
     private String category;
 
     @NotNull
+    @Size(min = 1, max = 100, message = "Type must be between {min} and {max} letters long")
     private Type type;
 
     @NotNull
     private LocalDate createdAt;
-
-    @NotNull
-    private LocalDate dueDate;
 }
