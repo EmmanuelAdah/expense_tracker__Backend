@@ -53,7 +53,6 @@ class ExpenseServiceImplTest {
         request1.setCategory("Food");
         request1.setType(Type.DIRECT);
         request1.setCreatedAt(LocalDate.now());
-        request1.setDueDate(LocalDate.now().plusMonths(1));
         expenseServiceImpl.saveExpense(request1, response.getUsername());
 
         assertThat(expenseServiceImpl.findByUserId(response.getUserId()).size())
