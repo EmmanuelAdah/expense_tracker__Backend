@@ -5,14 +5,15 @@ import com.expensetracker.data.repositories.UserRepository;
 import com.expensetracker.dtos.requests.LoginRequest;
 import com.expensetracker.dtos.requests.RegistrationRequest;
 import com.expensetracker.dtos.response.AuthenticationResponse;
+import com.expensetracker.exceptions.InvalidEmailException;
 import com.expensetracker.exceptions.InvalidLoginCredentialsException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static com.expensetracker.utils.Validator.isValidEmail;
 
 @Service
 @RequiredArgsConstructor
@@ -20,11 +21,13 @@ public class AuthenticationService {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
-    private final AuthenticationManager authManager;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public AuthenticationResponse register(RegistrationRequest request) {
+        if (!isValidEmail(request.getEmail()))
+            throw new InvalidEmailException("Invalid email format");
+
         var user = User.builder()
                 .firstname(request.getFirstname().toUpperCase())
                 .lastname(request.getLastname().toUpperCase())
@@ -52,10 +55,6 @@ public class AuthenticationService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
             throw new InvalidLoginCredentialsException("Invalid username or password");
 
-        authManager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.getUsername(),
-                request.getPassword())
-        );
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse
                 .builder()
