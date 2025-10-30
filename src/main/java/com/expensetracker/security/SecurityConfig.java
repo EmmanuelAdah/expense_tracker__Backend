@@ -1,6 +1,5 @@
 package com.expensetracker.security;
 
-import com.expensetracker.config.ApplicationConfig;
 import com.expensetracker.filter.JwtAuthenticationFilter;
 import com.expensetracker.services.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -19,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final JwtAuthenticationFilter jwtAuthFilter;
-    private final ApplicationConfig appConfig;
 
     // To filter http request upon client request
     @Bean
@@ -32,11 +31,15 @@ public class SecurityConfig {
             .anyRequest()
             .authenticated())
             .userDetailsService(userDetailsServiceImpl)
-            .authenticationProvider(appConfig.authenticationProvider())
             .sessionManagement(session -> session
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
