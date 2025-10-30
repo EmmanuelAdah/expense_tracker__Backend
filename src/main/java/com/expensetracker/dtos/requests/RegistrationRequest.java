@@ -12,32 +12,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegistrationRequest {
 
-    @NotEmpty(message = "firstname is mandatory")
-    @NotBlank(message = "firstname")
-    @Size(min = 3, max = 30, message = "first name must be between {min} and {max} long")
-    @Pattern(regexp = "^[A-Za-z]+$", message = "first name can only contain letters")
+    @NotBlank(message = "First name is mandatory")
+    @Size(min = 3, max = 30, message = "First name must be between {min} and {max} characters")
+    @Pattern(regexp = "^[A-Za-z]+$", message = "First name can only contain letters")
     private String firstname;
 
-    @NotEmpty(message = "lastname is mandatory")
-    @NotBlank(message = "lastname")
-    @Size(min = 3, max = 30, message = "last name must be between {min} and {max} long")
-    @Pattern(regexp = "^[A-Za-z]+$", message = "last name can only contain letters")
+    @NotBlank(message = "Last name is mandatory")
+    @Size(min = 3, max = 30, message = "Last name must be between {min} and {max} characters")
+    @Pattern(regexp = "^[A-Za-z]+$", message = "Last name can only contain letters")
     private String lastname;
 
-    @NotEmpty(message = "email is mandatory")
-    @NotBlank(message = "email is mandatory")
-    @Size(min = 10, max = 30, message = "email must be between {min} and {max} long")
-    @Email(message = "Invald email format")
-    //    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$\n")
+    @NotBlank(message = "Email is mandatory")
+    @Size(min = 10, max = 30, message = "Email must be between {min} and {max} characters")
+    @Email(message = "Invalid email format")
     private String email;
 
-    @NotEmpty(message = "username is mandatory")
-    @NotBlank(message = "username")
-    @Size(min = 4, max = 30, message = "username must be between {min} and {max} long")
+    @NotBlank(message = "Username is mandatory")
+    @Size(min = 4, max = 30, message = "Username must be between {min} and {max} characters")
     private String username;
 
-    @NotEmpty(message = "password is mandatory")
-    @NotBlank(message = "password is mandatory")
-    @Size(min = 6, max = 100, message = "password must be between {min} and {max} long")
+    @NotBlank(message = "Password is mandatory")
+    @Size(min = 6, max = 100, message = "Password must be between {min} and {max} characters")
     private String password;
 }
