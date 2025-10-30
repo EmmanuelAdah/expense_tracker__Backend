@@ -38,14 +38,8 @@ public class AuthenticationService {
 
         User savedUser = userRepository.save(user);
         var token = jwtService.generateToken(user);
-        return AuthenticationResponse
-                .builder()
-                .token(token)
-                .username(savedUser.getUsername())
-                .email(savedUser.getEmail())
-                .build();
 
-    //  could as well do this - return new AuthenticationResponse(token)
+        return authResponse(token, savedUser);
     }
 
     public AuthenticationResponse authenticate(LoginRequest request) {
@@ -55,10 +49,14 @@ public class AuthenticationService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
             throw new InvalidLoginCredentialsException("Invalid username or password");
 
-        var jwtToken = jwtService.generateToken(user);
+        var token = jwtService.generateToken(user);
+        return authResponse(token, user);
+    }
+
+    public AuthenticationResponse authResponse(String token, User user) {
         return AuthenticationResponse
                 .builder()
-                .token(jwtToken)
+                .token(token)
                 .username(user.getUsername())
                 .email(user.getEmail())
                 .build();
