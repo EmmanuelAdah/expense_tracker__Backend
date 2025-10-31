@@ -8,6 +8,7 @@ import com.expensetracker.dtos.requests.AddExpenseRequest;
 import com.expensetracker.dtos.response.ExpenseResponse;
 import com.expensetracker.exceptions.ExpenseNotFoundException;
 import com.expensetracker.exceptions.InsufficientBalanceException;
+import com.expensetracker.exceptions.InvalidAmountException;
 import com.expensetracker.exceptions.UserNotFoundException;
 import com.expensetracker.utils.Mapper;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +25,11 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public ExpenseResponse saveExpense(AddExpenseRequest request, String username) {
-
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        if (request.getAmount() <= 0)
+            throw new InvalidAmountException("Amount must be greater than 0");
 
         Expense expense = expenseRepository.save(mapExpense(request, user.getUserId()));
         double amount = request.getAmount();
