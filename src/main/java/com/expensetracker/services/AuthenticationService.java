@@ -18,7 +18,6 @@ import static com.expensetracker.utils.Validator.isValidEmail;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-
     private final UserRepository userRepository;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
@@ -31,7 +30,7 @@ public class AuthenticationService {
         var user = User.builder()
                 .firstname(request.getFirstname().toUpperCase())
                 .lastname(request.getLastname().toUpperCase())
-                .email(request.getEmail())
+                .email(request.getEmail().toLowerCase())
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
