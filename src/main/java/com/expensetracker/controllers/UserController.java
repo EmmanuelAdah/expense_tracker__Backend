@@ -1,5 +1,6 @@
 package com.expensetracker.controllers;
 
+import com.expensetracker.data.models.User;
 import com.expensetracker.dtos.response.UserResponse;
 import com.expensetracker.services.UserServiceImpl;
 import jakarta.validation.Valid;
@@ -8,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
+import static com.expensetracker.utils.Mapper.map;
 
 @RestController
 @RequestMapping("/api/tracker")
@@ -22,7 +25,8 @@ public class UserController {
 
     @GetMapping("/find/Username")
     public ResponseEntity<UserResponse> findByUsername(@Valid @RequestParam String username){
-        return ResponseEntity.ok(userServiceImpl.findByUsername(username));
+        User user = userServiceImpl.findByUsername(username);
+        return ResponseEntity.ok(map(user));
     }
 
     @GetMapping("/findByEmail")
@@ -57,4 +61,8 @@ public class UserController {
         return ResponseEntity.ok(userServiceImpl.setIncome(username, income));
     }
 
+//    @PatchMapping
+//    public ResponseEntity<UserResponse> updateUser(@Valid UpdateRequest request) {
+//        return ResponseEntity.ok(userServiceImpl.updatePassword(request));
+//    }
 }
