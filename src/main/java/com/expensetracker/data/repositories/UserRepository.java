@@ -14,11 +14,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.username = :username")
     Optional<User> findByUsername(String username);
 
-    @Transactional
+
     @Modifying
+    @Transactional
     @Query("DELETE FROM User u WHERE u.username = :username")
     void deleteByUsername(String username);
-
 
     @Query("SELECT CASE WHEN COUNT(u) > 0 THEN true ELSE false END FROM User u WHERE u.username = :username")
     boolean existsByUsername(String username);
