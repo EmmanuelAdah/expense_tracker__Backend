@@ -17,6 +17,11 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
 
     @Override
+    public User save(User user){
+        return userRepository.save(user);
+    }
+
+    @Override
     public UserResponse findById(long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
@@ -24,10 +29,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResponse findByUsername(String username){
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-       return map(user);
+    public User findByUsername(String username){
+        return userRepository.findByUsername(username)
+                    .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
     @Override
@@ -80,6 +84,7 @@ public class UserServiceImpl implements UserService{
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         user.setIncome(income);
+        user.setBalance(income);
         User savedUser = userRepository.save(user);
         return savedUser.getIncome();
     }
