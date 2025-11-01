@@ -9,38 +9,37 @@ import com.expensetracker.dtos.response.ExpenseResponse;
 import com.expensetracker.exceptions.ExpenseNotFoundException;
 import com.expensetracker.exceptions.InsufficientBalanceException;
 import com.expensetracker.exceptions.InvalidAmountException;
-import com.expensetracker.exceptions.UserNotFoundException;
 import com.expensetracker.utils.Mapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+
 import static com.expensetracker.utils.Mapper.map;
 import static com.expensetracker.utils.Mapper.mapExpense;
 
 @Service
 @RequiredArgsConstructor
 public class ExpenseServiceImpl implements ExpenseService {
-    private final UserRepository userRepository;
+    private final UserServiceImpl userServiceImpl;
     private final ExpenseRepository expenseRepository;
+    private final UserRepository userRepository;
 
     @Override
     public ExpenseResponse saveExpense(AddExpenseRequest request, String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        User user = userServiceImpl.findByUsername(username);
+        double amount = request.getAmount();
+        double balance = user.getBalance();
 
         if (request.getAmount() <= 0)
             throw new InvalidAmountException("Amount must be greater than 0");
 
-        Expense expense = expenseRepository.save(mapExpense(request, user.getUserId()));
-        double amount = request.getAmount();
-        double balance = user.getBalance();
-
         if (amount > balance)
             throw new InsufficientBalanceException("Insufficient balance");
 
-        user.getExpenses().add(expense);
-        user.setBalance(balance - amount);
+        Expense expense = expenseRepository.save(mapExpense(request, user.getUserId()));
 
+        user.setBalance(balance - amount);
         userRepository.save(user);
         return map(expense);
     }
@@ -55,11 +54,11 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public List<ExpenseResponse> findByUserId(long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        List<Expense> expenses = expenseRepository.findByUserId(userId);
+        if  (expenses.isEmpty())
+            throw new ExpenseNotFoundException("No expenses found");
 
-        return user.getExpenses()
-                .stream()
+        return expenses.stream()
                 .map(Mapper::map)
                 .toList();
     }
@@ -72,10 +71,16 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public void deleteAllByUserId(Long userId) {
-        User user  = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-        user.getExpenses().clear();
+    public void deleteAllByUserId(@Valid Long userId) {
+        while (!expenseRepository.findByUserId(userId)
+                .isEmpty()) {
+            expenseRepository.deleteAll();
+        }
+    }
+
+    @Override
+    public void deleteByExpenseId(@Valid Long id) {
+        expenseRepository.deleteExpenseById(id);
     }
 
     @Override
