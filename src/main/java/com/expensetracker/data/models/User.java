@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,7 +31,8 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
+
+    @Column(nullable = false, unique = true, updatable = false)
     private String username;
 
     @Column(nullable = false)
@@ -42,8 +42,8 @@ public class User implements UserDetails {
 
     private double balance;
 
-    @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY ,cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Expense> expenses = new ArrayList<>();
+    @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER ,cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Expense> expenses;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
