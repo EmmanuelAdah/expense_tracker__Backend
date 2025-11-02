@@ -1,6 +1,7 @@
 package com.expensetracker.utils;
 
 import com.expensetracker.data.models.Expense;
+import com.expensetracker.data.models.Type;
 import com.expensetracker.data.models.User;
 import com.expensetracker.dtos.requests.AddExpenseRequest;
 import com.expensetracker.dtos.response.ExpenseResponse;
@@ -31,7 +32,9 @@ public class Mapper {
         expense.setAmount(request.getAmount());
         expense.setCategory(request.getCategory());
         expense.setCreatedAt(LocalDate.now());
-        expense.setType(request.getType());
+        expense.setType(Type.valueOf(request.getType()
+                .toUpperCase()
+                .trim()));
         return expense;
     }
 
