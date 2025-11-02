@@ -8,6 +8,8 @@ import com.expensetracker.exceptions.invalidIncomeValueException;
 import com.expensetracker.utils.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import static com.expensetracker.utils.Mapper.*;
 
@@ -54,6 +56,7 @@ public class UserServiceImpl implements UserService{
                 .toList();
     }
 
+    @Transactional
     @Override
     public void deleteById(long userId) {
         if (!userRepository.existsById(userId))
@@ -61,6 +64,7 @@ public class UserServiceImpl implements UserService{
         userRepository.deleteById(userId);
     }
 
+    @Transactional
     @Override
     public void deleteByUsername(String username) {
         if (!userRepository.existsByUsername(username))
