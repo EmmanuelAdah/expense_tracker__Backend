@@ -9,14 +9,15 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface ExpenseRepository extends JpaRepository<Expense, Long> {
+public interface ExpenseRepository extends JpaRepository<Expense, UUID> {
 
-    List<Expense> findByUserId(long userId);
+    List<Expense> findByUserId(UUID userId);
 
     @Modifying
     @Transactional
     @Query("DELETE FROM Expense e WHERE e.id = :id")
-    void deleteExpenseById(@Param("id") long id);
+    void deleteExpenseById(@Param("id") UUID id);
 }
