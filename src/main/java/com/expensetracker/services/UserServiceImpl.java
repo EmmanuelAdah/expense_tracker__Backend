@@ -1,5 +1,6 @@
 package com.expensetracker.services;
 
+import com.expensetracker.data.models.Account;
 import com.expensetracker.data.models.User;
 import com.expensetracker.data.repositories.UserRepository;
 import com.expensetracker.dtos.response.UserResponse;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
+
 import static com.expensetracker.utils.Mapper.*;
 
 @Service
@@ -24,7 +27,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResponse findById(long userId){
+    public UserResponse findById(UUID userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         return map(user);
@@ -58,7 +61,7 @@ public class UserServiceImpl implements UserService{
 
     @Transactional
     @Override
-    public void deleteById(long userId) {
+    public void deleteById(UUID userId) {
         if (!userRepository.existsById(userId))
             throw new UserNotFoundException("User not found");
         userRepository.deleteById(userId);
@@ -87,9 +90,14 @@ public class UserServiceImpl implements UserService{
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        user.setIncome(income);
-        user.setBalance(income);
+        if (user.getAccount() == null) {
+            user.setAccount(new Account());
+        }
+
+
+        user.getAccount().setIncome(income);
+        user.getAccount().setBalance(income);
         User savedUser = userRepository.save(user);
-        return savedUser.getIncome();
+        return savedUser.getAccount().getIncome();
     }
 }
