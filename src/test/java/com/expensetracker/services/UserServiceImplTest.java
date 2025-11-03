@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import java.util.Optional;
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -26,7 +28,7 @@ class UserServiceImplTest {
     @DisplayName("Test findById returns UserResponse when user is found")
     void testFindByIdReturnsUserResponseWhenUserIsFound() {
         // Arrange
-        long userId = 1L;
+        UUID userId = UUID.randomUUID();
         User mockUser = new User();
         mockUser.setUsername("testuser");
         mockUser.setPassword("hashedpassword");
@@ -48,7 +50,7 @@ class UserServiceImplTest {
     @DisplayName("Test findById throws UserNotFoundException when user is not found")
     void testFindByIdThrowsExceptionWhenUserNotFound() {
         // Arrange
-        long userId = 1L;
+        UUID userId = UUID.randomUUID();
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
