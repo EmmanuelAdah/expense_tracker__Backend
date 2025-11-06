@@ -18,7 +18,7 @@ import static com.expensetracker.utils.Validator.isValidEmail;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final UserRepository userRepository;
+    private final UserServiceImpl userServiceImpl;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
@@ -35,15 +35,14 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .build();
 
-        User savedUser = userRepository.save(user);
+        User savedUser = userServiceImpl.save(user);
         var token = jwtService.generateToken(user);
 
         return authResponse(token, savedUser);
     }
 
     public AuthenticationResponse authenticate(LoginRequest request) {
-        User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("Invalid username or password"));
+        User user = userServiceImpl.findByUsername(request.getUsername());
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword()))
             throw new InvalidLoginCredentialsException("Invalid username or password");
