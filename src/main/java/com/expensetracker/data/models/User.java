@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -19,8 +20,8 @@ import java.util.List;
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID userId;
 
     @Column(nullable = false, columnDefinition = "Text")
     private String firstname;
@@ -38,9 +39,9 @@ public class User implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    private double income;
+    @Embedded
+    private Account account = new Account();
 
-    private double balance;
 
     @OneToMany(mappedBy = "userId", fetch = FetchType.EAGER ,cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Expense> expenses;
