@@ -7,20 +7,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @Entity
-@Table(name = "expenses")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Expense {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(nullable = false)
-    private long userId;
+    private UUID userId;
 
     @Column(nullable = false)
     private String name;
@@ -40,3 +40,4 @@ public class Expense {
     private LocalDate createdAt;
 
 }
+
