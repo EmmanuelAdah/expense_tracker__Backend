@@ -8,8 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,22 +26,27 @@ public class ExpenseController {
     }
 
     @GetMapping("/findById")
-    public ResponseEntity<ExpenseResponse> findById(@Valid @RequestParam Long expenseId){
-        return ResponseEntity.ok(expenseServiceImpl.findById(expenseId));
+    public ResponseEntity<ExpenseResponse> findById(@Valid @RequestParam UUID id){
+        return ResponseEntity.ok(expenseServiceImpl.findById(id));
     }
 
-    @GetMapping("/findNoteByUserId")
-    public ResponseEntity<List<ExpenseResponse>> findNotesByUserId(@Valid @RequestParam Long userId){
+    @GetMapping("/findByUserId")
+    public ResponseEntity<List<ExpenseResponse>> findByUserId(@Valid @RequestParam UUID userId){
         return ResponseEntity.ok(expenseServiceImpl.findByUserId(userId));
     }
 
-    @GetMapping("/findAllNotes")
+    @GetMapping("/findAllExpenses")
     public ResponseEntity<List<ExpenseResponse>> findAll(){
         return ResponseEntity.ok(expenseServiceImpl.findAll());
     }
 
     @DeleteMapping("/deleteAllByUserId")
-    public void deleteAllByUserId(@Valid @RequestParam Long userId){
+    public void deleteAllByUserId(@Valid @RequestParam UUID userId){
         expenseServiceImpl.deleteAllByUserId(userId);
+    }
+
+    @DeleteMapping("/deleteById")
+    public void deleteById(@Valid @RequestParam UUID id){
+        expenseServiceImpl.deleteByExpenseId(id);
     }
 }

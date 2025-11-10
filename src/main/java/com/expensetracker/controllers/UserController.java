@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.UUID;
 
 import static com.expensetracker.utils.Mapper.map;
 
@@ -19,7 +20,7 @@ public class UserController {
     private final UserServiceImpl userServiceImpl;
 
     @GetMapping("/findById")
-    public ResponseEntity<UserResponse> findById(@Valid @RequestParam long userId) {
+    public ResponseEntity<UserResponse> findById(@Valid @RequestParam UUID userId) {
         return ResponseEntity.ok(userServiceImpl.findById(userId));
     }
 
@@ -40,7 +41,7 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteById")
-    public void deleteById(@Valid @RequestParam long userId){
+    public void deleteById(@Valid @RequestParam UUID userId){
         userServiceImpl.deleteById(userId);
     }
 
