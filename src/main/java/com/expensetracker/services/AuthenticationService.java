@@ -1,7 +1,6 @@
 package com.expensetracker.services;
 
 import com.expensetracker.data.models.User;
-import com.expensetracker.data.repositories.UserRepository;
 import com.expensetracker.dtos.requests.LoginRequest;
 import com.expensetracker.dtos.requests.RegistrationRequest;
 import com.expensetracker.dtos.response.AuthenticationResponse;
@@ -9,7 +8,6 @@ import com.expensetracker.exceptions.InvalidEmailException;
 import com.expensetracker.exceptions.InvalidLoginCredentialsException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
