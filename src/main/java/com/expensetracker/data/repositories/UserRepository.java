@@ -16,7 +16,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @Query("SELECT u FROM User u WHERE u.username = :username")
     Optional<User> findByUsername(String username);
 
-
     @Modifying
     @Transactional
     @Query("DELETE FROM User u WHERE u.username = :username")
@@ -26,7 +25,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     boolean existsByUsername(String username);
 
     @Query("SELECT u FROM User u WHERE u.userId = :userId")
-    Optional<User> findById(long userId);
+    Optional<User> findById(UUID userId);
 
     @Query("SELECT u FROM User u WHERE u.email = :email")
     Optional<User> findByEmail(String email);
