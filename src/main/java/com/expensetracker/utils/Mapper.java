@@ -9,6 +9,7 @@ import com.expensetracker.dtos.response.UserResponse;
 import com.expensetracker.exceptions.InvalidAmountException;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public class Mapper {
 
@@ -17,12 +18,12 @@ public class Mapper {
         response.setUserId(user.getUserId());
         response.setEmail(user.getEmail());
         response.setUsername(user.getUsername());
-        response.setBalance(user.getBalance());
-        response.setIncome(user.getIncome());
+        response.setBalance(user.getAccount().getBalance());
+        response.setIncome(user.getAccount().getIncome());
         return response;
     }
 
-    public static Expense mapExpense(AddExpenseRequest request, long userId) {
+    public static Expense mapExpense(AddExpenseRequest request, UUID userId) {
         if (request.getAmount() <= 0)
             throw new InvalidAmountException("Amount must be greater than 0");
 
